@@ -1,7 +1,0 @@
-/vendor/
-*.log
-.env
-/node_modules/
-.idea/
-*.bak
-*.DS_Store
