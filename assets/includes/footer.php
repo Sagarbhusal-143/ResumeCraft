@@ -13,12 +13,6 @@
         ?>
     })
 
-<?php
-$fn->error();
-$fn->alert();
-?>
 
 </script>
-</body>
 
-</html>

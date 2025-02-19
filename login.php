@@ -1,5 +1,4 @@
-   
-   <?php
+    <?php
 $title ="Login | ResumeCraft";
 require './assets/includes/header.php';
 $fn->nonAuthpage();

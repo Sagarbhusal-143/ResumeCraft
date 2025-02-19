@@ -5,10 +5,8 @@ require '../assets/class/function.class.php';
 
 if($_POST){
     $post=$_POST;
-
     if($post['email_id'] && $post['password']){
 
-       
         $email_id=$db->real_escape_string($post['email_id']);
         $password=md5($db->real_escape_string($post['password']));
 
@@ -17,7 +15,6 @@ if($_POST){
        $result = $result->fetch_assoc();
 
        if($result){
-       
         $fn->setAuth($result);
         $fn->setAlert('logged in !');
         $fn -> redirect('../myresumes.php');
@@ -28,11 +25,12 @@ if($_POST){
        }
 
 
+    
     }else{
         $fn->setError('please fill the form !');
-        $fn -> redirect("../login.php");
+        $fn -> redirect('../login.php');
     }
-}else{
 
-    $fn -> redirect("../login.php");
+}else{
+    $fn -> redirect('../login.php');
        }

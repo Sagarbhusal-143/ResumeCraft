@@ -23,5 +23,5 @@ if($_POST){
     }
 }else{
 
-    $fn -> redirect('../change-password.php');
+    $fn -> redirect('../verification.php');
        }
