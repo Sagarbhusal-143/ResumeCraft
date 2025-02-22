@@ -1,3 +1,26 @@
+
+<?php
+require 'assets/class/database.class.php';
+require 'assets/class/function.class.php';
+
+$slug=$_GET['resume']??'';
+$resume = $db->query("SELECT * FROM resumes WHERE (slug='$slug' AND user_id=".$fn->Auth()['id'].")");
+$resume = $resume->fetch_assoc();
+if(!$resume){
+    $fn->redirect('myresumes.php');
+}
+
+$expes = $db->query("SELECT * FROM experience WHERE (resume_id=".$resume['id']." ) ");
+$expes = $expes->fetch_all(1);
+
+$educs = $db->query("SELECT * FROM educations WHERE (resume_id=".$resume['id']." )" );
+$educs= $educs->fetch_all(1);
+
+$skills = $db->query("SELECT * FROM skills WHERE (resume_id=".$resume['id']." )" );
+$skills= $skills->fetch_all(1);
+
+?>  
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,8 +33,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="icon" href="logo.png">
-    <title>Resume</title>
+    <link rel="icon" href="./assets/images/logo.png">
+    <title><?=$resume['full_name'].' | '.$resume['resume_title']?></title>
 </head>
 
 <body>
@@ -108,10 +131,10 @@
                 <tr>
                     <td></td>
                     <td class="personal-info zsection">
-                        <div class="fw-bold name">Sagar Bhusal</div>
-                        <div>Mobile : <span class="mobile">9847891231</span></div>
-                        <div>Email : <span class="email">sagar123@gmail.com</span></div>
-                        <div>Address : <span class="address">Kritipur,Kathmandu</span></div>
+                        <div class="fw-bold name"><?=$resume['full_name']?></div>
+                        <div>Mobile : <span class="mobile"><?=$resume['mobile_no']?></span></div>
+                        <div>Email : <span class="email"><?=$resume['email_id']?></span></div>
+                        <div>Address : <span class="address"><?=$resume['address']?></span></div>
                         <hr>
                     </td>
                 </tr>
@@ -119,8 +142,7 @@
                 <tr class="objective-section zsection">
                     <td class="fw-bold align-top text-nowrap pr title">Objective</td>
                     <td class="pb-3 objective">
-                        To be a part of an organization where get a chance to use my knowledge
-                        and skills to contribute in the progress of the organizations as well as myself.
+                    <?=$resume['objective']?>
                     </td>
                 </tr>
 
@@ -128,16 +150,31 @@
                     <td class="fw-bold align-top text-nowrap pr title">Experience</td>
                     <td class="pb-3 experiences">
 
-                        <div class="experience mb-2">
-                            <div class="fw-bold">- <span class="job-role">Deerwalk Digital Method</span> (<span
-                                    class="duration">2+ Years</span> )
+         <?php
+         if($expes){
+          foreach($expes as $exp){
+            ?>
+      <div class="experience mb-2">
+                            <div class="fw-bold">- <span class="job-role"><?=$exp['position']?>
                             </div>
-                            <div class="company">Sifal, Kathmandu</div>
-                            <div><span class="working-from">October 2024</span> – <span class="working-to">Currently
-                                    Working</span></div>
-                            <div class="work-description">Handling social media</div>
+                            <div class="company"><?=$exp['company']?></div>
+                            <div><span class="working-from"><?=$exp['started']?></span> – <span class="working-to"><?=$exp['ended']?></span></div>
+                            <div class="work-description"><?=$exp['job_desc']?></div>
                         </div>
 
+         <?php
+          }
+                        }else{
+                            ?>
+                          <div class="experience mb-2">
+                            <div class="company"> I am a Fresher.</div>
+                           
+                        </div>
+                            <?php
+                        }
+                        
+                        ?>
+                        
                     </td>
                 </tr>
 
@@ -145,18 +182,33 @@
                     <td class="fw-bold align-top text-nowrap pr title">Education</td>
                     <td class="pb-3 educations">
 
-                        <div class="education mb-2">
-                            <div class="fw-bold">- <span class="course">Completed 12th Class (Science)</span></div>
-                            <div class="institute">GGIC</div>
-                            <div class="date">Passed in 2023</div>
+
+                    
+         <?php
+         if($educs){
+          foreach($educs as $edu){
+            ?>
+      <div class="education mb-2">
+                            <div class="fw-bold">- <span class="course"><?=$edu['course']?></span></div>
+                            <div class="institute"><?=$edu['institute']?></div>
+                            <div><span class="working-from"><?=$edu['started']?></span> – <span class="working-to"><?=$edu['ended']?></span></div>
                         </div>
 
-                        <div class="education mb-2">
-                            <div class="fw-bold">- <span class="course">BSc. Csit</span></div>
-                            <div class="institute">Goldengate College</div>
-                            <div class="date">2022</div>
+         <?php
+          }
+                        }else{
+                            ?>
+                          <div class="education mb-2">
+                            <div class="institute"> I don't have any education.</div>
+                           
                         </div>
+                            <?php
+                        }
+                        
+                        ?>
+                        
 
+                    
 
 
                     </td>
@@ -166,8 +218,21 @@
                     <td class="fw-bold align-top text-nowrap pr title">Skills</td>
                     <td class="pb-3 skills">
 
-                        <div class="skill">- Basic Knowledge in Computer & Internet</div>
-                        <div class="skill">- MS Office (Word,Excel,Powerpoint)</div>
+                    <?php
+         if($skills){
+        foreach($skills as $skill){
+            ?>
+              <div class="skill">- <?=$skill['skill']?></div>
+            <?php
+        }
+    }else{
+        ?>
+  <div class="skill">- I don't have any skills</div>
+        <?php
+
+    }
+    ?>
+
 
                     </td>
                 </tr>
@@ -178,27 +243,27 @@
                         <table class="pd-table">
                             <tr>
                                 <td>Date of Birth</td>
-                                <td>: <span class="date-of-birth">06 March 2004</span></td>
+                                <td>: <span class="date-of-birth"><?=date('d F Y',strtotime($resume['dob']))?></span></td>
                             </tr>
                             <tr>
                                 <td>Gender</td>
-                                <td>: <span class="gender">Male</span></td>
+                                <td>: <span class="gender"><?=$resume['gender']?></span></td>
                             </tr>
                             <tr>
                                 <td>Religion</td>
-                                <td>: <span class="religion">Hindi</span></td>
+                                <td>: <span class="religion"><?=$resume['religion']?></span></td>
                             </tr>
                             <tr>
                                 <td>Nationality</td>
-                                <td>: <span class="nationality">Nepali</span></td>
+                                <td>: <span class="nationality"><?=$resume['nationality']?></span></td>
                             </tr>
                             <tr>
                                 <td>Marital Status</td>
-                                <td>: <span class="marital-status">Un-Married</span></td>
+                                <td>: <span class="marital-status"><?=$resume['marital_status']?></span></td>
                             </tr>
                             <tr>
                                 <td>Hobbies</td>
-                                <td>: <span class="hobbies">Listening Music</span></td>
+                                <td>: <span class="hobbies"><?=$resume['hobbies']?></span></td>
                             </tr>
 
                         </table>
@@ -209,8 +274,7 @@
                 <tr class="languages-known-section zsection">
                     <td class="fw-bold align-top text-nowrap pr title">Languages Known</td>
                     <td class="pb-3 languages">
-
-                        English & Nepali
+                    <?=$resume['languages']?>
                     </td>
                 </tr>
 
@@ -222,10 +286,7 @@
                         required.
                     </td>
                 </tr>
-                <tr>
-                    <td class="px-3">Date : 2025/02/19 </td>
-             
-                </tr>
+               
             </tbody>
         </table>
     </div>

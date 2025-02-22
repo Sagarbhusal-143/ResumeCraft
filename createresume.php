@@ -53,7 +53,7 @@ $fn->authpage();
                         <select class="form-select" name="gender">
                             <option>Male</option>
                             <option>Female</option>
-                            <option>Transgender</option>
+                 
 
 
 
@@ -77,7 +77,7 @@ $fn->authpage();
                         <label class="form-label">Nationality</label>
                         <select class="form-select" name="nationality">
                             <option>Nepali</option>
-                            <option>Non Nepali/option>
+                            <option>Non Nepali</option>
 
 
                         </select>
