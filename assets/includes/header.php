@@ -29,8 +29,8 @@ require './assets/class/function.class.php';
     <style>
         body {
           
-            background: rgb(249, 249, 249);
-            background: radial-gradient(circle, rgba(249, 249, 249, 1) 0%, rgba(240, 232, 127, 1) 49%, rgba(246, 243, 132, 1) 100%);
+            background: rgba(249, 249, 249, 0.65);
+            background: radial-gradient(circle, rgb(76, 122, 182) 0%, rgb(119, 164, 201) 49%, rgb(39, 168, 228) 100%);
 
         }
 

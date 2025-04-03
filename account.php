@@ -32,7 +32,7 @@ $user = $user->fetch_assoc();
                         <input type="email" name="email_id" placeholder="beest@abc.com" value="<?=@$user['email_id']?>" class="form-control" required>
                     </div>
                     <div class="col-12">
-                        <label class="form-label">New Password</label>
+                        <label class="form-label">Password</label>
                         <input type="text" name="password" class="form-control">
                     </div>
 

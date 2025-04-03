@@ -26,7 +26,7 @@ $skills= $skills->fetch_all(1);
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,13 +43,13 @@ $skills= $skills->fetch_all(1);
         body {
             margin: 0;
             padding: 0;
-            background-color: #FAFAFA;
+            background-color:rgb(255, 255, 255);
             font-family: 'Poppins', sans-serif;
             font-size: 12pt;
 
-            background: rgb(249, 249, 249);
-            background: radial-gradient(circle, rgba(249, 249, 249, 1) 0%, rgba(240, 232, 127, 1) 49%, rgba(246, 243, 132, 1) 100%);
-            /* background-image: url(./tiles/tile23.jpg); */
+            background: rgb(255, 255, 255);
+            background: radial-gradient(circle, rgb(255, 255, 255) 0%, rgba(240, 232, 127, 1) 49%, rgba(246, 243, 132, 1) 100%);
+         background-image: url(./assets/tiles/tiles/<?=$resume['background']?>); 
             background-attachment: fixed;
         }
 
@@ -115,13 +115,23 @@ $skills= $skills->fetch_all(1);
         .pd-table td {
             padding-right: 10px;
             padding-bottom: 3px;
-            padding-top: 3px;
+            padding-top: 3px;  
         }
     </style>
 
-</body>
+<div class="extra">
+<div class="w-100 py-2 bg-dark d-flex justify-content-center gap-3">
+    <?php
+    $actual_link = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    ?>
 
-<div class="page">
+    <button class = "btn btn-light btn-sm" id="print"><i class="bi bi-printer"></i> Print</button>
+    <button class = "btn btn-light btn-sm" data-bs-toggle="offcanvas" data-bs-target="#background"><i class="bi bi-backpack4-fill"></i> Background</button>
+
+    <button class = "btn btn-light btn-sm" id="downloadpdf"><i class="bi bi-file-earmark-pdf"></i> </i> Download</button>
+</div>
+</div>
+<div class="page" style=""font-family: <?=$resume['font']?>;">
     <div class="subpage">
         <table class="w-100">
             <tbody>
@@ -206,10 +216,6 @@ $skills= $skills->fetch_all(1);
                         }
                         
                         ?>
-                        
-
-                    
-
 
                     </td>
                 </tr>
@@ -232,8 +238,6 @@ $skills= $skills->fetch_all(1);
 
     }
     ?>
-
-
                     </td>
                 </tr>
 
@@ -292,5 +296,106 @@ $skills= $skills->fetch_all(1);
     </div>
 
 </div>
+
+
+</div>
+
+<div class="offcanvas offcanvas-bottom" tabindex="-1" id="background" style="height:50vh" aria-labelledby="offcanvasBottomLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasBottomLabel">Change Background</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  
+  <div class="offcanvas-body w-100">
+    <style>
+      .tile {
+        width: 100px;
+        height: 100px;
+        background-size:cover;
+      }
+      .tile:hover {
+        cursor: pointer;
+        opacity: 0.7;
+      }
+    </style>
+    <div class="d-flex w-100 gap-2 flex-wrap justify-content-center">
+
+    <?php
+for ($i=1;$i<22;$i++){
+?>
+<div class="tile rounded shadow-sm border" data-background="tile<?=$i?>.png" style="background-image:url(./assets/images/tiles/tile<?=$i?>.png)"></div>
+<?php
+}
+?>
+<div class="tile rounded shadow-sm border" data-background="tile23.jpg" style="background-image:url(./assets/images/tiles/tile23.jpg)"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-6ERszym9WkdPvHWeT87bh9SQ6Ny2PheTNGX13N7RuBCsyN/ojieV8Qyq46cDFL"
+        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+
+
+<script>
+$("#downloadpdf").click(function(){
+    window.jsPDF = window.jspdf.jsPDF;
+    var doc = new jsPDF();
+    
+    var page = document.querySelector('.page');
+    
+    doc.html(page, {
+        callback: function(doc) {
+            doc.save('<?=$resume['full_name']?> - <?=$resume['resume_title']?>.pdf');
+        },
+        margin: [2, 2, 2, 2],
+        x: 0,
+        y: 0,
+        width: 200,
+        windowWidth: 800
+    });
+});
+
+
+$('.tile').click(function(){
+
+    let tile = $(this).data('background');;
+     $("body").css('background-image','url(./assets/images/tiles/'+tile+')');
+
+ $.ajax({
+    url: 'actions/changeback.action.php',
+    method: 'POST',
+    data: {
+        resume_id: <?=@$resume['id']?>,
+       background : tile
+    },
+    success: function(res) {
+        console.log(res);
+    },
+    error: function(res) {
+        console.log(res);
+        alert('background is not updated');
+    }
+})
+    
+    })
+$("#print").click(function(){
+  $(".extra").hide();
+    window.print();
+
+    setTimeout(() => {
+        $(".extra").show();
+    }, 500);
+})
+</script>
+
+
+</body>
+
+
 
 </html>

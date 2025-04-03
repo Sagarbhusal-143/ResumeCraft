@@ -2,7 +2,7 @@
         <div class="container">
             <a class="navbar-brand" href="myresumes.php">
                 <img src="./assets/images/logo.png" alt="Logo" height="24" class="d-inline-block align-text-top">
-                Resume Craft
+                Resume Builder
             </a>
             <div>
                 <a href="account.php" class="btn btn-sm btn-dark"><i class="bi bi-person-circle"></i> Account</a>
